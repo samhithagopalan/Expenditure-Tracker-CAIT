@@ -1,0 +1,56 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>💰 Expense Manager</h2>
+    <h3>Register</h3>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Full Name:</label>
+        <input type="text" class="form-control" id="name" formControlName="name" />
+        <div *ngIf="submitted && f['name'].errors" class="error-text">
+          <span *ngIf="f['name'].errors['required']">Name is required</span>
+          <span *ngIf="f['name'].errors['minlength']">Name must be at least 3 characters</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" formControlName="email" />
+        <div *ngIf="submitted && f['email'].errors" class="error-text">
+          <span *ngIf="f['email'].errors['required']">Email is required</span>
+          <span *ngIf="f['email'].errors['email']">Invalid email format</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" formControlName="password" />
+        <div *ngIf="submitted && f['password'].errors" class="error-text">
+          <span *ngIf="f['password'].errors['required']">Password is required</span>
+          <span *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" />
+        <div *ngIf="submitted && f['confirmPassword'].errors" class="error-text">
+          <span *ngIf="f['confirmPassword'].errors['required']">Confirm Password is required</span>
+          <span *ngIf="f['confirmPassword'].errors['passwordMismatch']">Passwords do not match</span>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        <span *ngIf="loading">Registering...</span>
+        <span *ngIf="!loading">Register</span>
+      </button>
+    </form>
+
+    <p class="login-link">
+      Already have an account? <a (click)="goToLogin()">Login here</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="expense-list-container">
+  <div class="header">
+    <h1>Expenses</h1>
+    <button (click)="addNewExpense()" class="btn btn-primary">➕ Add New Expense</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading expenses...</div>
+
+  <div *ngIf="!loading" class="content">
+    <!-- Filter -->
+    <div class="filter-section">
+      <label for="statusFilter">Filter by Status:</label>
+      <select [(ngModel)]="filterStatus" id="statusFilter" class="select-control">
+        <option value="ALL">All</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="PAID">Paid</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
+    </div>
+
+    <!-- Expenses Table -->
+    <div *ngIf="filteredExpenses.length === 0" class="no-data">
+      No expenses found. <a (click)="addNewExpense()">Add one now!</a>
+    </div>
+
+    <table *ngIf="filteredExpenses.length > 0" class="expense-table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let expense of filteredExpenses">
+          <td>{{ expense.description }}</td>
+          <td>${{ expense.amount }}</td>
+          <td>{{ expense.categoryId }}</td>
+          <td>
+            <span [ngClass]="'status-' + expense.status.toLowerCase()">
+              {{ expense.status }}
+            </span>
+          </td>
+          <td>{{ expense.expenseDate | date: 'MMM d, yyyy' }}</td>
+          <td class="actions">
+            <button (click)="editExpense(expense.id)" class="btn-edit">✏️ Edit</button>
+            <button (click)="deleteExpense(expense.id)" class="btn-delete">🗑️ Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+
+  <div *ngIf="loading" class="loading">Loading dashboard...</div>
+
+  <div *ngIf="!loading" class="dashboard-content">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Expenses</h3>
+        <p class="stat-value">${{ totalExpenses.toFixed(2) }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Approved Expenses</h3>
+        <p class="stat-value">${{ approvedExpenses.toFixed(2) }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Total Splits</h3>
+        <p class="stat-value">${{ totalSplits.toFixed(2) }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Categories</h3>
+        <p class="stat-value">{{ categories.length }}</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button (click)="navigateToAddExpense()" class="btn btn-success">➕ Add New Expense</button>
+      <button (click)="navigateToExpenses()" class="btn btn-info">📋 View All Expenses</button>
+    </div>
+
+    <!-- Recent Expenses -->
+    <div class="recent-section">
+      <h2>Recent Expenses</h2>
+      <div *ngIf="recentExpenses.length === 0" class="no-data">
+        No expenses yet. <a (click)="navigateToAddExpense()">Add one now!</a>
+      </div>
+      <table *ngIf="recentExpenses.length > 0" class="expense-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let expense of recentExpenses">
+            <td>{{ expense.description }}</td>
+            <td>${{ expense.amount }}</td>
+            <td>
+              <span [ngClass]="'status-' + expense.status.toLowerCase()">
+                {{ expense.status }}
+              </span>
+            </td>
+            <td>{{ expense.expenseDate | date: 'MMM d, yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories-section">
+      <h2>Your Categories</h2>
+      <div *ngIf="categories.length === 0" class="no-data">
+        No categories. <a routerLink="/categories">Create one!</a>
+      </div>
+      <div *ngIf="categories.length > 0" class="category-list">
+        <div *ngFor="let cat of categories" class="category-item">
+          <h4>{{ cat.name }}</h4>
+          <p>{{ cat.description || 'No description' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

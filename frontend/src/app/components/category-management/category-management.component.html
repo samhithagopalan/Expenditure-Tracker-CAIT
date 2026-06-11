@@ -1,0 +1,59 @@
+<div class="category-management-container">
+  <h1>Category Management</h1>
+
+  <div class="content">
+    <!-- Form -->
+    <div class="form-section">
+      <h2>{{ editingId ? 'Edit Category' : 'Create New Category' }}</h2>
+      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Category Name *</label>
+          <input type="text" class="form-control" id="name" formControlName="name" />
+          <div *ngIf="submitted && f['name'].errors" class="error-text">
+            <span *ngIf="f['name'].errors['required']">Name is required</span>
+            <span *ngIf="f['name'].errors['minlength']">Name must be at least 2 characters</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea class="form-control" id="description" formControlName="description" rows="3"></textarea>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+        <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            {{ editingId ? 'Update Category' : 'Create Category' }}
+          </button>
+          <button *ngIf="editingId" type="button" class="btn btn-secondary" (click)="resetForm()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Categories List -->
+    <div class="categories-section">
+      <h2>Your Categories</h2>
+
+      <div *ngIf="loading" class="loading">Loading categories...</div>
+
+      <div *ngIf="!loading && categories.length === 0" class="no-data">
+        No categories yet. Create one above!
+      </div>
+
+      <div *ngIf="!loading && categories.length > 0" class="category-grid">
+        <div *ngFor="let cat of categories" class="category-card">
+          <h3>{{ cat.name }}</h3>
+          <p>{{ cat.description || 'No description' }}</p>
+          <div class="card-actions">
+            <button (click)="editCategory(cat)" class="btn-edit">✏️ Edit</button>
+            <button (click)="deleteCategory(cat.id)" class="btn-delete">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

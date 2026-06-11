@@ -1,0 +1,83 @@
+<div class="expense-split-container">
+  <h1>Expense Splits</h1>
+
+  <div class="content">
+    <!-- Form -->
+    <div class="form-section">
+      <h2>Create Expense Split</h2>
+      <form [formGroup]="splitForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="expenseId">Select Expense *</label>
+          <select class="form-control" id="expenseId" formControlName="expenseId">
+            <option value="">Choose an expense</option>
+            <option *ngFor="let exp of expenses" [value]="exp.id">
+              {{ exp.description }} (${{ exp.amount }})
+            </option>
+          </select>
+          <div *ngIf="submitted && f['expenseId'].errors" class="error-text">
+            <span *ngIf="f['expenseId'].errors['required']">Expense is required</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="userId">Split With User *</label>
+          <select class="form-control" id="userId" formControlName="userId">
+            <option value="">Choose a user</option>
+            <option *ngFor="let user of users" [value]="user.id">
+              {{ user.name }} ({{ user.email }})
+            </option>
+          </select>
+          <div *ngIf="submitted && f['userId'].errors" class="error-text">
+            <span *ngIf="f['userId'].errors['required']">User is required</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="splitAmount">Amount (USD) *</label>
+          <input type="number" class="form-control" id="splitAmount" formControlName="splitAmount" step="0.01" />
+          <div *ngIf="submitted && f['splitAmount'].errors" class="error-text">
+            <span *ngIf="f['splitAmount'].errors['required']">Amount is required</span>
+            <span *ngIf="f['splitAmount'].errors['min']">Amount must be greater than 0</span>
+          </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+        <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+        <button type="submit" class="btn btn-primary">Create Split</button>
+      </form>
+    </div>
+
+    <!-- Splits List -->
+    <div class="splits-section">
+      <h2>Your Expense Splits</h2>
+
+      <div *ngIf="loading" class="loading">Loading splits...</div>
+
+      <div *ngIf="!loading && splits.length === 0" class="no-data">
+        No expense splits yet. Create one above!
+      </div>
+
+      <table *ngIf="!loading && splits.length > 0" class="splits-table">
+        <thead>
+          <tr>
+            <th>Expense</th>
+            <th>Split With</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let split of splits">
+            <td>{{ getExpenseName(split.expenseId) }}</td>
+            <td>{{ getUserName(split.userId) }}</td>
+            <td>${{ split.splitAmount }}</td>
+            <td>
+              <button (click)="deleteSplit(split.id)" class="btn-delete">🗑️ Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
