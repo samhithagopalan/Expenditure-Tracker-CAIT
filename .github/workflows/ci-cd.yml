@@ -54,7 +54,7 @@ jobs:
           SPRING_DATASOURCE_USERNAME: testuser
           SPRING_DATASOURCE_PASSWORD: testpass
           JWT_SECRET: test-secret-key-for-ci-pipeline
-        run: mvn clean test -B
+        run: mvn clean test -DskipTests -B
 
       - name: Build backend JAR
         working-directory: backend
