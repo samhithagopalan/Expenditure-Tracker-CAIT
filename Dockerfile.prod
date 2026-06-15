@@ -31,9 +31,10 @@ COPY backend/src ./src
 # Your frontend Dockerfile uses `dist/*/browser`. This wildcard copies that compiled app directly.
 COPY --from=frontend-build /app/dist/*/browser/ /app/src/main/resources/static/
 
-# Build production JAR package
-# Build production JAR package by explicitly shutting down surefire, fail-safe, and core tests
-RUN mvn clean package -DskipTests=true -Dsurefire.skipTests=true -Dmaven.test.skip=true -B
+
+# Build production JAR package and completely bypass all test executions and validation phases
+RUN mvn clean package -DskipTests -Dmaven.test.skip=true -Dsurefire.skipTests=true -DfailIfNoTests=false -Dtest=false -B
+
 
 # ==============================================================
 # STAGE 3: Final Secure Runtime Image
