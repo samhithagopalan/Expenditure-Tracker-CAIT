@@ -1,0 +1,162 @@
+<div class="profile-container">
+
+  <h2>User Profile</h2>
+  <div style="margin-bottom:20px;">
+
+    <img
+        *ngIf="profile.profilePicture"
+        [src]="'http://localhost:8080/uploads/profile-pictures/' + profile.profilePicture"
+        width="120"
+        height="120"
+        style="border-radius:50%; object-fit:cover;">
+
+    <div
+        *ngIf="!profile.profilePicture"
+        style="
+        width:120px;
+        height:120px;
+        border-radius:50%;
+        background:#ddd;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:40px;">
+
+        👤
+
+    </div>
+
+    <br>
+
+    <button
+    *ngIf="!editPictureMode"
+    (click)="startPictureEdit()">
+
+    Edit Picture
+
+    </button>
+
+    <button
+    *ngIf="profile.profilePicture"
+    (click)="deletePicture()">
+
+    Delete Picture
+
+    </button>
+
+        <div *ngIf="editPictureMode">
+
+        <input
+            type="file"
+            (change)="onFileSelected($event)">
+
+        <button
+            (click)="uploadPicture()">
+
+            Save New Picture
+
+        </button>
+
+        <button
+            (click)="cancelPictureEdit()">
+
+            Cancel
+
+        </button>
+
+        </div>
+
+    </div>
+  <div>
+
+    <strong>Name:</strong>
+
+    <span *ngIf="!editMode">
+      {{ profile.name }}
+    </span>
+
+    <input
+      *ngIf="editMode"
+      [(ngModel)]="editName">
+
+  </div>
+
+  <br>
+
+  <div>
+
+    <strong>Email:</strong>
+
+    {{ profile.email }}
+
+  </div>
+
+  <br>
+
+  <div *ngIf="editMode">
+
+    <strong>New Password:</strong>
+
+    <input
+      type="password"
+      [(ngModel)]="editPassword">
+
+  </div>
+
+  <hr>
+
+  <h3>Statistics</h3>
+
+  <p>
+    Total Expenses:
+    ₹{{ profile.totalExpenses }}
+  </p>
+
+  <p>
+    Total Categories:
+    {{ profile.totalCategories }}
+  </p>
+
+  <p>
+    Total Budgets:
+    {{ profile.totalBudgets }}
+  </p>
+
+  <p>
+    Member Since:
+    {{ profile.memberSince | date }}
+  </p>
+
+  <div *ngIf="successMessage">
+
+    ✅ {{ successMessage }}
+
+  </div>
+
+  <br>
+
+  <button
+    *ngIf="!editMode"
+    (click)="startEdit()">
+
+    Edit Profile
+
+  </button>
+
+  <button
+    *ngIf="editMode"
+    (click)="saveProfile()">
+
+    Save
+
+  </button>
+
+  <button
+    *ngIf="editMode"
+    (click)="cancelEdit()">
+
+    Cancel
+
+  </button>
+
+</div>

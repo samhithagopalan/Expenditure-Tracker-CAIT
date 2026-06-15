@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.ByteArrayOutputStream;
+
 @Service
 public class ExpenseService {
     @Autowired
@@ -103,4 +107,105 @@ public class ExpenseService {
 
         expenseRepository.delete(expense);
     }
+    public Expense updateReceiptFile(Long expenseId,
+                                        String receiptFile) {
+
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() ->
+                        new RuntimeException("Expense not found"));
+
+        expense.setReceiptFile(receiptFile);
+        expense.setUpdatedAt(LocalDateTime.now());
+
+        return expenseRepository.save(expense);
+        }
+    public Expense deleteReceiptFile(Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() ->
+                        new RuntimeException("Expense not found"));
+
+        expense.setReceiptFile(null);
+        expense.setUpdatedAt(LocalDateTime.now());
+
+        return expenseRepository.save(expense);
+        }
+    public byte[] exportExpensesToExcel(Long userId)
+                throws Exception {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        List<Expense> expenses =
+                expenseRepository.findByUser(user);
+
+        Workbook workbook =
+                new XSSFWorkbook();
+
+        Sheet sheet =
+                workbook.createSheet("Expenses");
+
+        Row header =
+                sheet.createRow(0);
+
+        header.createCell(0)
+                .setCellValue("Description");
+
+        header.createCell(1)
+                .setCellValue("Amount");
+
+        header.createCell(2)
+                .setCellValue("Category");
+
+        header.createCell(3)
+                .setCellValue("Status");
+
+        header.createCell(4)
+                .setCellValue("Date");
+
+        header.createCell(5)
+                .setCellValue("Receipt");
+
+        int rowNum = 1;
+
+        for (Expense expense : expenses) {
+
+                Row row =
+                        sheet.createRow(rowNum++);
+
+                row.createCell(0)
+                        .setCellValue(expense.getDescription());
+
+                row.createCell(1)
+                        .setCellValue(
+                                expense.getAmount().doubleValue());
+
+                row.createCell(2)
+                        .setCellValue(
+                                expense.getCategory().getName());
+
+                row.createCell(3)
+                        .setCellValue(
+                                expense.getStatus().toString());
+
+                row.createCell(4)
+                        .setCellValue(
+                                expense.getExpenseDate().toString());
+
+                row.createCell(5)
+                        .setCellValue(
+                                expense.getReceiptFile() != null
+                                        ? "Yes"
+                                        : "No");
+        }
+
+        ByteArrayOutputStream out =
+                new ByteArrayOutputStream();
+
+        workbook.write(out);
+
+        workbook.close();
+
+        return out.toByteArray();
+        }
 }

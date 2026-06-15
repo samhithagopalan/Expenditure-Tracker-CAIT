@@ -18,6 +18,7 @@ export class AddExpenseComponent implements OnInit {
   success = '';
   isEditMode = false;
   expenseId: number | null = null;
+  selectedReceipt: File | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -112,7 +113,20 @@ export class AddExpenseComponent implements OnInit {
 
     if (this.isEditMode && this.expenseId) {
       this.apiService.updateExpense(this.expenseId, expenseData).subscribe(
-        (response: any) => {
+      (response: any) => {
+
+        if (
+          this.selectedReceipt &&
+          this.expenseId
+        ) {
+
+          this.apiService
+            .uploadReceipt(
+              this.expenseId,
+              this.selectedReceipt
+            )
+            .subscribe();
+        }
           this.success = 'Expense updated successfully!';
           setTimeout(() => {
             this.router.navigate(['/expenses']);
@@ -125,12 +139,28 @@ export class AddExpenseComponent implements OnInit {
       );
     } else {
       this.apiService.createExpense(expenseData).subscribe(
-        (response: any) => {
-          this.success = 'Expense added successfully!';
-          setTimeout(() => {
-            this.router.navigate(['/expenses']);
-          }, 1500);
-        },
+      (response: any) => {
+
+        if (
+          this.selectedReceipt &&
+          response.id
+        ) {
+
+          this.apiService
+            .uploadReceipt(
+              response.id,
+              this.selectedReceipt
+            )
+            .subscribe();
+        }
+
+        this.success =
+          'Expense added successfully!';
+
+        setTimeout(() => {
+          this.router.navigate(['/expenses']);
+        }, 1500);
+      },
         (err: any) => {
           this.error = 'Failed to create expense. Please try again.';
           this.loading = false;
@@ -141,5 +171,19 @@ export class AddExpenseComponent implements OnInit {
 
   cancel(): void {
     this.router.navigate(['/expenses']);
+  }
+
+  onReceiptSelected(
+    event: any
+  ): void {
+
+    if (
+      event.target.files &&
+      event.target.files.length > 0
+    ) {
+
+      this.selectedReceipt =
+        event.target.files[0];
+    }
   }
 }

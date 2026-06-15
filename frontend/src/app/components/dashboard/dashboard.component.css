@@ -218,3 +218,27 @@
     grid-template-columns: 1fr;
   }
 }
+
+.charts-section {
+  margin: 30px 0;
+}
+
+.charts-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.chart-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+canvas {
+  max-height: 350px;
+}

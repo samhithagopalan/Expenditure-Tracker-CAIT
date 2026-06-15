@@ -22,11 +22,18 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
                                          @Param("startDate") LocalDateTime startDate, 
                                          @Param("endDate") LocalDateTime endDate);
     
-    @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.user = :user AND e.status = 'APPROVED'")
+    @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.user = :user AND e.status = 'PAID'")
     BigDecimal sumApprovedExpensesByUser(@Param("user") User user);
     
     @Query("SELECT SUM(e.amount) FROM Expense e WHERE e.user = :user AND e.expenseDate BETWEEN :startDate AND :endDate")
     BigDecimal sumExpensesByUserAndDateRange(@Param("user") User user, 
                                              @Param("startDate") LocalDateTime startDate, 
                                              @Param("endDate") LocalDateTime endDate);
+    
+    @Query("SELECT COALESCE(SUM(e.amount),0) FROM Expense e WHERE e.user = :user AND e.category = :category")
+    BigDecimal sumExpensesByUserAndCategory(@Param("user") User user,
+                                            @Param("category") com.example.expense.model.Category category);
+
+    @Query("SELECT COALESCE(SUM(e.amount),0) FROM Expense e WHERE e.user = :user")
+    BigDecimal sumAllExpensesByUser(@Param("user") User user);
 }

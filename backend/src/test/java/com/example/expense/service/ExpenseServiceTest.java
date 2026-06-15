@@ -96,11 +96,11 @@ public class ExpenseServiceTest {
         when(expenseRepository.findByIdAndUser(1L, user)).thenReturn(Optional.of(expense));
         when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
 
-        Expense result = expenseService.updateExpense(1L, 1L, "Updated", BigDecimal.valueOf(75), "APPROVED");
+        Expense result = expenseService.updateExpense(1L, 1L, "Updated", BigDecimal.valueOf(75), "PAID");
 
         assertEquals("Updated", result.getDescription());
         assertEquals(BigDecimal.valueOf(75), result.getAmount());
-        assertEquals(ExpenseStatus.APPROVED, result.getStatus());
+        assertEquals(ExpenseStatus.PAID, result.getStatus());
     }
 
     @Test

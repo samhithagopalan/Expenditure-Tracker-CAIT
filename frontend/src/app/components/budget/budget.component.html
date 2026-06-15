@@ -1,0 +1,130 @@
+<div class="budget-container">
+
+  <h2>Budget Tracking</h2>
+
+  <div class="budget-form">
+
+    <select [(ngModel)]="selectedCategory">
+
+      <option value="">Select Category</option>
+
+      <option 
+        *ngFor="let category of availableCategories"
+        [value]="category.id">
+
+        {{ category.name }}
+
+      </option>
+
+    </select>
+
+    <input
+      type="number"
+      placeholder="Budget Amount"
+      [(ngModel)]="budgetAmount">
+    <div *ngIf="errorMessage" style="color:red; margin-bottom:10px;">
+        {{ errorMessage }}
+    </div>
+    <button (click)="createBudget()">
+      Create Budget
+    </button>
+
+  </div>
+
+  <table>
+
+    <thead>
+
+      <tr>
+        <th>Category</th>
+        <th>Budget</th>
+        <th>Spent</th>
+        <th>Status</th>
+        <th>Progress</th>
+        <th>Action</th>
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let budget of budgets">
+
+        <td>{{ budget.categoryName }}</td>
+
+        <td>
+
+        <span *ngIf="editingBudgetId !== budget.budgetId">
+            ₹{{ budget.budgetAmount }}
+        </span>
+
+        <input
+            *ngIf="editingBudgetId === budget.budgetId"
+            type="number"
+            [(ngModel)]="editAmount">
+
+        </td>
+
+        <td>₹{{ budget.spentAmount }}</td>
+
+        <td>
+
+          <span *ngIf="budget.overBudget">
+
+            ⚠ Over Budget by
+            ₹{{ budget.difference }}
+
+          </span>
+
+          <span *ngIf="!budget.overBudget">
+
+            ✅ Within Budget
+
+          </span>
+
+        </td>
+
+        <td>
+
+          <progress
+            [value]="getProgress(budget)"
+            max="100">
+          </progress>
+
+          {{ getProgress(budget) | number:'1.0-0' }}%
+
+        </td>
+
+        <td>
+
+            <button
+                *ngIf="editingBudgetId !== budget.budgetId"
+                (click)="startEdit(budget)">
+                Edit
+            </button>
+
+            <button
+                *ngIf="editingBudgetId === budget.budgetId"
+                (click)="saveEdit()">
+                Save
+            </button>
+
+            <button
+                *ngIf="editingBudgetId === budget.budgetId"
+                (click)="cancelEdit()">
+                Cancel
+            </button>
+
+            <button
+                (click)="deleteBudget(budget.budgetId)">
+                Delete
+            </button>
+
+            </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

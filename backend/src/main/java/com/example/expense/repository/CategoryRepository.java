@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findByUser(User user);
     Optional<Category> findByIdAndUser(Long id, User user);
+    long countByUser(User user);
 }

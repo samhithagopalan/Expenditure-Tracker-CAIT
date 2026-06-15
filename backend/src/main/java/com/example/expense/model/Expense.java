@@ -23,6 +23,9 @@ public class Expense {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "receipt_file")
+    private String receiptFile;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

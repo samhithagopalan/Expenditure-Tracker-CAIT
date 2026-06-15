@@ -86,7 +86,6 @@ mvn test -X
 - `POST /api/expenses` - Create expense
 - `GET /api/expenses/{id}` - Get expense by ID
 - `GET /api/expenses/user/{userId}` - Get user's expenses
-- `GET /api/expenses/user/{userId}/total-approved` - Get total approved expenses
 - `GET /api/expenses/user/{userId}/range?startDate={date}&endDate={date}` - Get expenses by date range
 - `PUT /api/expenses/{id}` - Update expense
 - `DELETE /api/expenses/{id}?userId={userId}` - Delete expense
@@ -144,7 +143,7 @@ backend/
 - id (PK)
 - description
 - amount
-- status (PENDING, APPROVED, PAID, REJECTED)
+- status (PENDING PAID)
 - user_id (FK)
 - category_id (FK)
 - expense_date

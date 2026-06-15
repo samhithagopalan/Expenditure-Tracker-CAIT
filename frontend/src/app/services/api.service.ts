@@ -111,4 +111,102 @@ export class ApiService {
   deleteExpenseSplit(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/expense-splits/${id}`);
   }
+  // Budget API
+
+  createBudget(budgetData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/budgets`, budgetData);
+  }
+
+  getBudgetsByUser(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/budgets/user/${userId}`);
+  }
+
+  updateBudget(id: number, budgetData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/budgets/${id}`, budgetData);
+  }
+
+  deleteBudget(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/budgets/${id}`);
+  }
+
+  getActualSpent(userId: number, categoryId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.apiUrl}/budgets/actual-spent?userId=${userId}&categoryId=${categoryId}`
+    );
+  }
+  getBudgetSummary(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/budgets/summary/${userId}`
+    );
+  }
+  getProfileSummary(userId: number): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/users/${userId}/profile`
+    );
+  }
+
+  updateProfile(id: number, profileData: any): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/users/${id}`,
+      profileData
+    );
+  }
+  uploadProfilePicture(
+    userId: number,
+    file: File
+  ) {
+
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+    return this.http.post(
+      `${this.apiUrl}/users/${userId}/upload-picture`,
+      formData
+    );
+  }
+
+  deleteProfilePicture(
+    userId: number
+  ) {
+
+    return this.http.delete(
+      `${this.apiUrl}/users/${userId}/profile-picture`
+    );
+  }
+
+  uploadReceipt(
+    expenseId: number,
+    file: File
+  ) {
+
+    const formData = new FormData();
+
+    formData.append(
+      'file',
+      file
+    );
+
+    return this.http.post(
+      `${this.apiUrl}/expenses/${expenseId}/upload-receipt`,
+      formData
+    );
+  }
+  deleteReceipt(
+    expenseId: number
+  ) {
+
+    return this.http.delete(
+      `${this.apiUrl}/expenses/${expenseId}/receipt`
+    );
+  }
+  exportExpenses(userId: number) {
+
+    return this.http.get(
+      `${this.apiUrl}/expenses/export/${userId}`,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 }

@@ -1,9 +1,25 @@
 <div class="expense-list-container">
   <div class="header">
     <h1>Expenses</h1>
-    <button (click)="addNewExpense()" class="btn btn-primary">➕ Add New Expense</button>
-  </div>
 
+    <div>
+      <button
+        (click)="addNewExpense()"
+        class="btn btn-primary">
+
+        ➕ Add New Expense
+
+      </button>
+
+      <button
+        (click)="exportToExcel()"
+        class="btn btn-success">
+
+        📊 Export Excel
+
+      </button>
+    </div>
+  </div>
   <div *ngIf="loading" class="loading">Loading expenses...</div>
 
   <div *ngIf="!loading" class="content">
@@ -13,9 +29,7 @@
       <select [(ngModel)]="filterStatus" id="statusFilter" class="select-control">
         <option value="ALL">All</option>
         <option value="PENDING">Pending</option>
-        <option value="APPROVED">Approved</option>
         <option value="PAID">Paid</option>
-        <option value="REJECTED">Rejected</option>
       </select>
     </div>
 
@@ -32,13 +46,14 @@
           <th>Category</th>
           <th>Status</th>
           <th>Date</th>
+          <th>Receipt</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let expense of filteredExpenses">
           <td>{{ expense.description }}</td>
-          <td>${{ expense.amount }}</td>
+          <td>₹{{ expense.amount }}</td>
           <td>{{ expense.categoryId }}</td>
           <td>
             <span [ngClass]="'status-' + expense.status.toLowerCase()">
@@ -46,6 +61,35 @@
             </span>
           </td>
           <td>{{ expense.expenseDate | date: 'MMM d, yyyy' }}</td>
+          <td>
+
+            <a
+              *ngIf="expense.receiptFile"
+              [href]="'http://localhost:8080/uploads/receipts/' + expense.receiptFile"
+              target="_blank">
+
+              📄 Receipt
+
+            </a>
+
+            <br>
+
+            <button
+              *ngIf="expense.receiptFile"
+              (click)="deleteReceipt(expense.id)">
+
+              🗑 Delete
+
+            </button>
+
+            <span
+              *ngIf="!expense.receiptFile">
+
+              —
+
+            </span>
+
+          </td>
           <td class="actions">
             <button (click)="editExpense(expense.id)" class="btn-edit">✏️ Edit</button>
             <button (click)="deleteExpense(expense.id)" class="btn-delete">🗑️ Delete</button>

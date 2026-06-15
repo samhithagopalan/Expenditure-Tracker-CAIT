@@ -67,6 +67,51 @@ export class ExpenseListComponent implements OnInit {
       );
     }
   }
+  deleteReceipt(
+      expenseId: number
+    ): void {
+
+      if (
+        !confirm(
+          'Delete receipt?'
+        )
+      ) {
+        return;
+      }
+
+    this.apiService
+      .deleteReceipt(expenseId)
+      .subscribe(() => {
+
+        this.loadExpenses();
+      });
+  } 
+
+  exportToExcel(): void {
+
+    const userId =
+      this.authService.currentUserValue?.id;
+
+    this.apiService
+      .exportExpenses(userId)
+      .subscribe((blob: Blob) => {
+
+        const url =
+          window.URL.createObjectURL(blob);
+
+        const a =
+          document.createElement('a');
+
+        a.href = url;
+
+        a.download =
+          'expenses.xlsx';
+
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      });
+  }
 
   addNewExpense(): void {
     this.router.navigate(['/add-expense']);

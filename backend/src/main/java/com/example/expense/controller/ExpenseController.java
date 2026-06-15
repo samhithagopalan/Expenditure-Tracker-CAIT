@@ -14,6 +14,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+
 @RestController
 @RequestMapping("/api/expenses")
 @CrossOrigin(origins = "*")
@@ -97,11 +105,81 @@ public class ExpenseController {
         }
     }
 
+    @PostMapping("/{id}/upload-receipt")
+    public ResponseEntity<ExpenseDTO> uploadReceipt(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+
+        try {
+
+            String uploadDir = "uploads/receipts/";
+
+            Files.createDirectories(
+                    Paths.get(uploadDir));
+
+            String fileName =
+                    System.currentTimeMillis()
+                            + "_"
+                            + file.getOriginalFilename();
+
+            Path filePath =
+                    Paths.get(uploadDir, fileName);
+
+            Files.write(
+                    filePath,
+                    file.getBytes());
+
+            Expense expense =
+                    expenseService.updateReceiptFile(
+                            id,
+                            fileName);
+
+            return ResponseEntity.ok(
+                    convertToDTO(expense));
+
+        } catch (Exception e) {
+
+            return ResponseEntity.badRequest()
+                    .body(null);
+        }
+    }
+
+    @DeleteMapping("/{id}/receipt")
+        public ResponseEntity<ExpenseDTO>
+        deleteReceipt(
+                @PathVariable Long id) {
+
+            Expense expense =
+                    expenseService.deleteReceiptFile(id);
+
+            return ResponseEntity.ok(
+                    convertToDTO(expense));
+        }
+    @GetMapping("/export/{userId}")
+        public ResponseEntity<byte[]>
+        exportExpenses(
+                @PathVariable Long userId)
+                throws Exception {
+
+            byte[] excelFile =
+                    expenseService.exportExpensesToExcel(
+                            userId);
+
+            return ResponseEntity.ok()
+                    .header(
+                            HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=expenses.xlsx"
+                    )
+                    .contentType(
+                            MediaType.APPLICATION_OCTET_STREAM)
+                    .body(excelFile);
+        }
     private ExpenseDTO convertToDTO(Expense expense) {
         return ExpenseDTO.builder()
                 .id(expense.getId())
                 .description(expense.getDescription())
                 .amount(expense.getAmount())
+                .receiptFile(expense.getReceiptFile())
                 .userId(expense.getUser().getId())
                 .categoryId(expense.getCategory().getId())
                 .status(expense.getStatus().toString())

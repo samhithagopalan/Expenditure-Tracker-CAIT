@@ -11,7 +11,7 @@
           <select class="form-control" id="expenseId" formControlName="expenseId">
             <option value="">Choose an expense</option>
             <option *ngFor="let exp of expenses" [value]="exp.id">
-              {{ exp.description }} (${{ exp.amount }})
+              {{ exp.description }} (₹{{ exp.amount }})
             </option>
           </select>
           <div *ngIf="submitted && f['expenseId'].errors" class="error-text">
@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-          <label for="splitAmount">Amount (USD) *</label>
+          <label for="splitAmount">AMOUNT (INR) *</label>
           <input type="number" class="form-control" id="splitAmount" formControlName="splitAmount" step="0.01" />
           <div *ngIf="submitted && f['splitAmount'].errors" class="error-text">
             <span *ngIf="f['splitAmount'].errors['required']">Amount is required</span>
@@ -71,7 +71,7 @@
           <tr *ngFor="let split of splits">
             <td>{{ getExpenseName(split.expenseId) }}</td>
             <td>{{ getUserName(split.userId) }}</td>
-            <td>${{ split.splitAmount }}</td>
+            <td>₹{{ split.splitAmount }}</td>
             <td>
               <button (click)="deleteSplit(split.id)" class="btn-delete">🗑️ Delete</button>
             </td>

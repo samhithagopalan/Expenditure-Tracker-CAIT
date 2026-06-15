@@ -8,22 +8,37 @@
     <div class="stats-grid">
       <div class="stat-card">
         <h3>Total Expenses</h3>
-        <p class="stat-value">${{ totalExpenses.toFixed(2) }}</p>
-      </div>
-      <div class="stat-card">
-        <h3>Approved Expenses</h3>
-        <p class="stat-value">${{ approvedExpenses.toFixed(2) }}</p>
+        <p class="stat-value">₹{{ totalExpenses.toFixed(2) }}</p>
       </div>
       <div class="stat-card">
         <h3>Total Splits</h3>
-        <p class="stat-value">${{ totalSplits.toFixed(2) }}</p>
+        <p class="stat-value">₹{{ totalSplits.toFixed(2) }}</p>
       </div>
       <div class="stat-card">
         <h3>Categories</h3>
         <p class="stat-value">{{ categories.length }}</p>
       </div>
     </div>
+    <div class="charts-section">
+      <h2>Expense Analytics</h2>
 
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Expenses by Category</h3>
+          <canvas id="categoryChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <h3>Expense Status</h3>
+          <canvas id="statusChart"></canvas>
+        </div>
+
+        <div class="chart-card full-width">
+          <h3>Monthly Expense Trend</h3>
+          <canvas id="monthlyChart"></canvas>
+        </div>
+      </div>
+    </div>
     <!-- Action Buttons -->
     <div class="action-buttons">
       <button (click)="navigateToAddExpense()" class="btn btn-success">➕ Add New Expense</button>
@@ -48,7 +63,7 @@
         <tbody>
           <tr *ngFor="let expense of recentExpenses">
             <td>{{ expense.description }}</td>
-            <td>${{ expense.amount }}</td>
+            <td>₹{{ expense.amount }}</td>
             <td>
               <span [ngClass]="'status-' + expense.status.toLowerCase()">
                 {{ expense.status }}

@@ -13,6 +13,7 @@ public class ExpenseDTO {
     private Long id;
     private String description;
     private BigDecimal amount;
+    private String receiptFile;
     private Long userId;
     private Long categoryId;
     private String status;

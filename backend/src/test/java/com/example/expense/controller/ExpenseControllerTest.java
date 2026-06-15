@@ -88,14 +88,14 @@ public class ExpenseControllerTest {
         ExpenseDTO expenseDTO = ExpenseDTO.builder()
                 .description("Updated Lunch")
                 .amount(BigDecimal.valueOf(75))
-                .status("APPROVED")
+                .status("PAID")
                 .build();
 
         User user = User.builder().id(1L).build();
         Category category = Category.builder().id(1L).user(user).build();
-        Expense expense = Expense.builder().id(1L).user(user).category(category).description("Updated Lunch").amount(BigDecimal.valueOf(75)).status(ExpenseStatus.APPROVED).build();
+        Expense expense = Expense.builder().id(1L).user(user).category(category).description("Updated Lunch").amount(BigDecimal.valueOf(75)).status(ExpenseStatus.PAID).build();
 
-        when(expenseService.updateExpense(1L, 1L, "Updated Lunch", BigDecimal.valueOf(75), "APPROVED")).thenReturn(expense);
+        when(expenseService.updateExpense(1L, 1L, "Updated Lunch", BigDecimal.valueOf(75), "PAID")).thenReturn(expense);
 
         mockMvc.perform(put("/api/expenses/1")
                 .contentType(MediaType.APPLICATION_JSON)

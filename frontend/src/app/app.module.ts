@@ -14,6 +14,8 @@ import { AddExpenseComponent } from './components/add-expense/add-expense.compon
 import { CategoryManagementComponent } from './components/category-management/category-management.component';
 import { ExpenseSplitComponent } from './components/expense-split/expense-split.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { BudgetComponent } from './components/budget/budget.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     AddExpenseComponent,
     CategoryManagementComponent,
     ExpenseSplitComponent,
-    NavbarComponent
+    NavbarComponent,
+    BudgetComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

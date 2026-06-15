@@ -7,9 +7,12 @@ import { ExpenseListComponent } from './components/expense-list/expense-list.com
 import { AddExpenseComponent } from './components/add-expense/add-expense.component';
 import { CategoryManagementComponent } from './components/category-management/category-management.component';
 import { ExpenseSplitComponent } from './components/expense-split/expense-split.component';
+import { BudgetComponent } from './components/budget/budget.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'budgets', component: BudgetComponent},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
@@ -17,7 +20,8 @@ const routes: Routes = [
   { path: 'add-expense', component: AddExpenseComponent },
   { path: 'edit-expense/:id', component: AddExpenseComponent },
   { path: 'categories', component: CategoryManagementComponent },
-  { path: 'splits', component: ExpenseSplitComponent }
+  { path: 'splits', component: ExpenseSplitComponent },
+  { path: 'profile', component: ProfileComponent }
 ];
 
 @NgModule({
