@@ -16,7 +16,7 @@ RUN npm run build -- --configuration production
 # ==============================================================
 # STAGE 2: Build the Spring Boot Backend (Injecting Frontend)
 # ==============================================================
-FROM maven:3.9.6-eclipse-temurin-17 AS backend-build
+FROM maven:3.9.6-eclipse-temurin-11 AS backend-build
 
 WORKDIR /app
 
@@ -38,7 +38,7 @@ RUN mvn clean package -DskipTests=true -Dsurefire.skipTests=true -Dmaven.test.sk
 # ==============================================================
 # STAGE 3: Final Secure Runtime Image
 # ==============================================================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:11-jre-alpine
 
 WORKDIR /app
 
