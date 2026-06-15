@@ -2,7 +2,6 @@
   <h1>Category Management</h1>
 
   <div class="content">
-    <!-- Form -->
     <div class="form-section">
       <h2>{{ editingId ? 'Edit Category' : 'Create New Category' }}</h2>
       <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
@@ -33,8 +32,6 @@
         </div>
       </form>
     </div>
-
-    <!-- Categories List -->
     <div class="categories-section">
       <h2>Your Categories</h2>
 
